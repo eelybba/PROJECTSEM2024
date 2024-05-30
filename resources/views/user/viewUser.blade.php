@@ -4,6 +4,17 @@
         <div class="font-extrabold text-xl mt-2">
             User List
         </div>
+        {{-- SearchBar--}}
+         <div class=" mt-5">
+            <form action="{{ route('search') }}" method="GET" >
+        <div class="items-left border rounded-lg">
+            <input type="text" name="query" placeholder="Search Matrix ID ..."
+               class="px-4 py2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <button type="submit" 
+        class="px-4 py2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        Search</button> 
+         {{-- Add user button--}}
+        </div>
         <div class="flex justify-end w-full mb-5 relative right-0">
             <a href="{{ route('addUser') }}"
                 class="p-2 mx-2 border border-transparent rounded-xl hover:text-gray-600"

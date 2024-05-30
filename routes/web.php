@@ -106,3 +106,6 @@ Route::middleware('role:admin')->group(function () {
 
 // All user can access this route
 Route::get('/announcementList', [AnnouncementController::class, 'announcementList'])->name('announcementList');
+
+//SearchBar
+Route::get('/search',[SearchController::class,'search'])->name('search');
