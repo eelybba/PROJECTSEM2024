@@ -8,6 +8,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\DutyRosterController;
+use App\Http\Controllers\SearchController;
 
 // Change this to change the default page
 Route::get('/', function () {
