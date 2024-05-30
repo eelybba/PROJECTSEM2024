@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class UserController extends Controller
 {
     /**
@@ -41,6 +42,30 @@ class UserController extends Controller
         if ($request->password != $request->confirmpass) {
             return redirect()->back()->with('error', 'Password does not match');
         }
+        // validate if password has at least 8 digits
+        if (strlen($request->password) < 8) {
+            return redirect()->back()->with('error', 'Password must be at least 8 characters long');
+        }
+        // validate if the password contains at least one uppercase letter
+        if (!preg_match('/[A-Z]/', $request->password)) {
+            return redirect()->back()->with('error', 'Password must contain at least one uppercase letter');
+        }
+
+        // validate if the password contains at least one lowercase letter
+        if (!preg_match('/[a-z]/', $request->password)) {
+            return redirect()->back()->with('error', 'Password must contain at least one lowercase letter');
+        }
+
+        // validate if the password contains at least one digit
+        if (!preg_match('/\d/', $request->password)) {
+            return redirect()->back()->with('error', 'Password must contain at least one digit');
+        }
+
+        // validateif the password contains at least one special character
+        if (!preg_match('/[$@$!%*?&]/', $request->password)) {
+            return redirect()->back()->with('error', 'Password must contain at least one special character');
+        }
+
         // validate if phone number is 9 to 11 digits long
         if (!is_numeric($request->phone)) {
             return redirect()->back()->with('error', 'Phone number must be numeric');
@@ -97,6 +122,10 @@ class UserController extends Controller
         // validate if password same as confirm password
         if ($request->password != $request->confirmpass) {
             return redirect()->back()->with('error', 'Password does not match');
+        }
+        // validate if password has at least 8 digits
+        if (strlen($request->password) < 8) {
+            return redirect()->back()->with('error', 'Password must be at least 8 characters long');
         }
         // validate if phone number is 9 to 11 digits long
         if (!is_numeric($request->phone)) {
