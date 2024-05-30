@@ -55,12 +55,18 @@
                                             </svg>
                                         </button>
                                     </form>
+                                    {{-- Confirmation on user deletion --}}
+                                    <script>
+                                        function confirmDeleteUser() {
+                                            return confirm('Are you sure you want to delete this user?');
+                                        }
+                                    </script>
                                     {{-- Delete User --}}
                                     <form action="{{ route('deleteUser') }}" method="post" class="flex">
                                         @csrf
                                         @method('delete')
                                         <input type="hidden" name="id" value="{{ $user->id }}">
-                                        <button type="submit">
+                                        <button type="submit" onclick="return confirmDeleteUser()">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
                                                 viewBox="0 0 24 24" stroke="red" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
