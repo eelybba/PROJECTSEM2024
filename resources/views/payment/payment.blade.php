@@ -82,7 +82,7 @@
                         let discount = 0;
 
                         // Mock validation of the voucher code
-                        if (voucherCode === 'DISCOUNT10') {
+                        if (voucherCode === 'DISCOUNT100') {
                             discount = 0.1 * totalPrice;
                         } else if (voucherCode === 'DISCOUNT20') {
                             discount = 0.2 * totalPrice;
