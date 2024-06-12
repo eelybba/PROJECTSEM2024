@@ -12,14 +12,16 @@ class DutyRosterController extends Controller
      */
     public function index()
     {
-        $dutyRoster = DutyRoster::all();
-        return view ('dutyRoster.viewDuty',compact('dutyRoster'));
+        // Fetching duty rosters ordered by week in ascending order
+        $dutyRoster = DutyRoster::orderBy('week', 'asc')->get();
+        
+        // Passing the ordered data to the view
+        return view('dutyRoster.viewDuty', compact('dutyRoster'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-
     public function create()
     {
         return view('dutyRoster.addDuty');
@@ -34,9 +36,8 @@ class DutyRosterController extends Controller
         $dutyRoster->user_id = $request->user_id;
         $dutyRoster->week = $request->week;
         $dutyRoster->date = $request->date;
-        // $dutyRoster->status = $request->status;
         $dutyRoster->start_time = $request->start_time;
-        $dutyRoster->end_time = $request->end_time ;
+        $dutyRoster->end_time = $request->end_time;
         $dutyRoster->save();
         return redirect()->route('DutyRoster')->with('success', 'Duty added successfully');
     }
@@ -63,13 +64,11 @@ class DutyRosterController extends Controller
      */
     public function update(Request $request, DutyRoster $dutyRoster)
     {
-        //
-
         $dutyRoster = DutyRoster::find($request->id);
         $dutyRoster->week = $request->week;
         $dutyRoster->date = $request->date;
         $dutyRoster->start_time = $request->start_time;
-        $dutyRoster->end_time = $request->end_time ;
+        $dutyRoster->end_time = $request->end_time;
         $dutyRoster->save();
         return redirect()->route('DutyRoster')->with('success', 'Duty updated successfully');
     }
@@ -79,7 +78,6 @@ class DutyRosterController extends Controller
      */
     public function destroy($id)
     {
-        //
         $duty_rosters = DutyRoster::find($id);
         $duty_rosters->delete();
         return redirect()->route('DutyRoster')->with('success', 'Duty deleted successfully');
