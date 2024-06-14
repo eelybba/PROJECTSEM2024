@@ -12,10 +12,11 @@
                 Add Product
             </a>
         </div>
-        {{-- Success message if product added successfully --}}
+        {{-- Success message if product added successfully , change colour--}}
         @if (session('success'))
             <div class="bg-green-500 p-1 mx-1 mb-3 rounded-xl text-white text-center">
                 {{ session('success') }}
+                
             </div>
         @endif
         {{-- Return alert message if inventory stock is low --}}
