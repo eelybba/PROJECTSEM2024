@@ -5,7 +5,13 @@
             Inventory
         </div>
         <div class="flex justify-end w-full mb-5 relative right-0">
-            @include('components.searchbar')
+            {{-- Search Form --}}
+            <form action="{{ route('searchInventory') }}" method="GET" class="flex">
+                <input type="text" name="query" placeholder="Search..." class="p-2 border rounded-l-xl">
+                <button type="submit" class="p-2 border border-transparent rounded-r-xl hover:text-gray-600" style="background-color: #00AEA6;">
+                    Search
+                </button>
+            </form>
             <a href="{{ route('addInventory') }}"
                 class="p-2 mx-2 border border-transparent rounded-xl hover:text-gray-600"
                 style="background-color: #00AEA6;">
@@ -44,7 +50,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- Retrieve added prodoct information --}}
+                    {{-- Retrieve added product information --}}
                     @foreach ($products as $item)
                         <tr class="bg-gray-200 border-y-8 border-white">
                             <td class="py-2">{{ $item->product_id }}</td>

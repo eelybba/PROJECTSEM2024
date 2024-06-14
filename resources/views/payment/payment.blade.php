@@ -28,11 +28,20 @@
             <div>
                 <span class="font-bold">Total Price:&nbsp;&nbsp;</span>
                 <span class="font-light">RM&nbsp;&nbsp;</span>
-                <span class="font-bold">{{ number_format($totalPrice, 2) }}</span>
+                <span class="font-bold" id="total-price">{{ number_format($totalPrice, 2) }}</span>
             </div>
+            
             <form action="{{ route('payment.store') }}" method="post" class="h-full w-full">
                 @csrf
-                <input type="hidden" name="total_price" value="{{ $totalPrice }}">
+                <input type="hidden" name="total_price" id="final-total-price" value="{{ $totalPrice }}">
+                
+                {{-- Voucher Code --}}
+                <div class="mt-4">
+                    <label for="voucher_code" class="font-semibold">Voucher Code:</label>
+                    <input type="text" id="voucher_code" name="voucher_code" class="rounded-xl border-x-0 border-t-0 w-auto">
+                    <button type="button" class="ml-2 px-4 py-2 bg-gray-200 rounded-xl font-bold" onclick="applyVoucher()">Apply</button>
+                </div>
+
                 <div class="flex flex-row mt-7 gap-x-40">
                     <div>
                         <div class="font-semibold">
@@ -47,7 +56,6 @@
                             <label for="card">QR Pay</label>
                         </div>
                     </div>
-
 
                     <div>
                         <div class="font-semibold">
@@ -67,7 +75,29 @@
                     function goBack() {
                         window.history.back();
                     }
+
+                    function applyVoucher() {
+                        const voucherCode = document.getElementById('voucher_code').value;
+                        const totalPrice = {{ $totalPrice }};
+                        let discount = 0;
+
+                        // Mock validation of the voucher code
+                        if (voucherCode === 'PETAKOM10') {
+                            discount = 0.1 * totalPrice;
+                        } else if (voucherCode === 'PETAKOM20') {
+                            discount = 0.2 * totalPrice;
+                        } else {
+                            alert('Invalid voucher code');
+                            return;
+                        }
+
+                        const finalPrice = totalPrice - discount;
+                        document.getElementById('total-price').innerText = finalPrice.toFixed(2);
+                        document.getElementById('final-total-price').value = finalPrice.toFixed(2);
+                        document.getElementById('cash_amount').value = finalPrice.toFixed(2);
+                    }
                 </script>
+
                 {{-- Buttons --}}
                 <div class="mt-10 mb-5 flex flex-row justify-between">
                     <div class="ml-auto mr-16">

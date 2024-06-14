@@ -75,7 +75,7 @@
                                     </td>
                                     <td class="py-2 px-2">
                                         {{-- Delete Item --}}
-                                        <form action="{{ route('cart.destroy', $cart->id) }}" method="post">
+                                        <form action="{{ route('cart.destroy', $cart->id) }}" method="post" onsubmit="return confirmDeleteItem()">
                                             @csrf
                                             @method('delete')
                                             <button type="submit">
@@ -108,9 +108,9 @@
                     }
                 </script>                
                 <div class="ml-auto mr-10">
-                    <form action="{{ route('cart.destroyAll') }}" method="post">
+                    <form action="{{ route('cart.destroyAll') }}" method="post" onsubmit="return confirmDeleteCart()">
                         @csrf
-                        <button type="submit" onclick="return confirmDeleteCart()" class="w-20 px-4 py-2 bg-gray-200 rounded-xl font-bold">Cancel</button>
+                        <button type="submit" class="w-20 px-4 py-2 bg-gray-200 rounded-xl font-bold">Cancel</button>
                     </form>
                 </div>
                 <div>
@@ -122,3 +122,9 @@
 
         </div>
 </x-app-layout>
+
+<script>
+    function confirmDeleteItem() {
+        return confirm('Are you sure you want to delete this item?');
+    }
+</script>

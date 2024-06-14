@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -36,55 +35,29 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // $product = new Product();
-        // Product::orderby('id')->get();
-        // $product->product_id = $request->product_id;
-        // $product->product_name = $request->name;
-        // $cost = $request->cost;
-        // $cost = number_format($cost, 2, '.', '');
-        // $product->product_cost = $cost;
-        // $product->product_price = $request->price;
-        // $price = $request->price;
-        // $price = number_format($price, 2, '.', '');
-        // $product->product_price = $price;
-        // $product->product_quantity = $request->quantity;
-        // $product->product_category = $request->category;
-        // $product->product_brand = $request->brand;
-        // $product->save();
-        // return redirect()->route('product')->with('success', 'Product added successfully');
+        // Validate request
+        $request->validate([
+            'product_id' => 'required|unique:products',
+            'name' => 'required|string|max:255',
+            'cost' => 'required|numeric',
+            'price' => 'required|numeric',
+            'quantity' => 'required|integer',
+            'category' => 'required|string|max:255',
+            'brand' => 'required|string|max:255',
+        ]);
 
-        // Error message if there is existing product id
-
-        $existingProduct = Product::where('product_id', $request->product_id)->first();
-
-        if ($existingProduct != null) {
-            return redirect()->route('addInventory')->with('error', 'Barcode already exists.');
-        }
-
+        // Create a new product
         $product = new Product();
-        Product::orderby('id')->get();
         $product->product_id = $request->product_id;
         $product->product_name = $request->name;
-        $cost = $request->cost;
-        $cost = number_format($cost, 2, '.', '');
-        $product->product_cost = $cost;
-        $product->product_price = $request->price;
-        $price = $request->price;
-        $price = number_format($price, 2, '.', '');
-        $product->product_price = $price;
+        $product->product_cost = number_format($request->cost, 2, '.', '');
+        $product->product_price = number_format($request->price, 2, '.', '');
         $product->product_quantity = $request->quantity;
         $product->product_category = $request->category;
         $product->product_brand = $request->brand;
         $product->save();
-        return redirect()->route('product')->with('success', 'Product added successfully');
-    }
 
-    /**
-     * Display the specified product.
-     */
-    public function show(Product $product)
-    {
-        //
+        return redirect()->route('product.index')->with('success', 'Product added successfully');
     }
 
     /**
@@ -97,34 +70,67 @@ class ProductController extends Controller
     }
 
     /**
-     * Update the specified product in databse.
+     * Update the specified product in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
-        $product = Product::find($request->id);
+        // Validate request
+        $request->validate([
+            'product_id' => 'required|unique:products,product_id,' . $id,
+            'name' => 'required|string|max:255',
+            'cost' => 'required|numeric',
+            'price' => 'required|numeric',
+            'quantity' => 'required|integer',
+            'category' => 'required|string|max:255',
+            'brand' => 'required|string|max:255',
+        ]);
+
+        // Update product
+        $product = Product::find($id);
         $product->product_id = $request->product_id;
         $product->product_name = $request->name;
-        $cost = $request->cost;
-        $cost = number_format($cost, 2, '.', '');
-        $product->product_cost = $cost;
-        $product->product_price = $request->price;
-        $price = $request->price;
-        $price = number_format($price, 2, '.', '');
-        $product->product_price = $price;
+        $product->product_cost = number_format($request->cost, 2, '.', '');
+        $product->product_price = number_format($request->price, 2, '.', '');
         $product->product_quantity = $request->quantity;
         $product->product_category = $request->category;
         $product->product_brand = $request->brand;
         $product->save();
-        return redirect()->route('product')->with('success', 'Product updated successfully');
+
+        return redirect()->route('product.index')->with('success', 'Product updated successfully');
     }
 
     /**
-     * Remove the specified product from database.
+     * Remove the specified product from storage.
      */
     public function destroy($id)
     {
         $product = Product::find($id);
         $product->delete();
-        return redirect()->route('product')->with('success', 'Product deleted successfully');
+        return redirect()->route('product.index')->with('success', 'Product deleted successfully');
+    }
+
+    /**
+     * Search for products.
+     */
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        
+        // Search for products
+        $products = Product::where('product_name', 'LIKE', "%{$query}%")
+                            ->orWhere('product_category', 'LIKE', "%{$query}%")
+                            ->orWhere('product_brand', 'LIKE', "%{$query}%")
+                            ->get();
+        
+        // Check for low stock alerts
+        $alert = Product::where('product_quantity', '<=', 5)->get();
+        if (count($alert) <= 0) {
+            $alert = null;
+        }
+
+        return view('products.viewInventory', compact('products', 'alert'));
     }
 }
+
+
+
