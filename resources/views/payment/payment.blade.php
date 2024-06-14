@@ -82,9 +82,9 @@
                         let discount = 0;
 
                         // Mock validation of the voucher code
-                        if (voucherCode === 'DISCOUNT100') {
+                        if (voucherCode === 'PETAKOM10') {
                             discount = 0.1 * totalPrice;
-                        } else if (voucherCode === 'DISCOUNT20') {
+                        } else if (voucherCode === 'PETAKOM20') {
                             discount = 0.2 * totalPrice;
                         } else {
                             alert('Invalid voucher code');

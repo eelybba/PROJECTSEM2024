@@ -74,6 +74,7 @@ Route::middleware('role:admin,coordinator')->group(function () {
     Route::get('/products/edit/{id}', [ProductController::class, 'edit'])->name('editInventory');
     Route::post('/products/update/{id}', [ProductController::class, 'update'])->name('updateInventory');
     Route::post('/products/delete/{id}', [ProductController::class, 'destroy'])->name('deleteInventory');
+    
 });
 
 //Report Module
@@ -105,8 +106,26 @@ Route::middleware('role:admin')->group(function () {
     Route::delete('/users/delete', [UserController::class, 'destroy'])->name('deleteUser');
 });
 
+// Inventory Module
+//Only Admin and Coordinator can access this route
+Route::middleware('role:admin,coordinator')->group(function () {
+    Route::get('/products', [ProductController::class, 'index'])->name('product');
+    Route::get('/products/add', [ProductController::class, 'create'])->name('addInventory');
+    Route::post('/products/store', [ProductController::class, 'store'])->name('storeInventory');
+    Route::get('/products/edit/{id}', [ProductController::class, 'edit'])->name('editInventory');
+    Route::post('/products/update/{id}', [ProductController::class, 'update'])->name('updateInventory');
+    Route::post('/products/delete/{id}', [ProductController::class, 'destroy'])->name('deleteInventory');
+});
+
 // All user can access this route
 Route::get('/announcementList', [AnnouncementController::class, 'announcementList'])->name('announcementList');
 
-//SearchBar
-Route::get('/search',[SearchController::class,'search'])->name('search');
+
+Route::get('/searchInventory', [ProductController::class, 'search'])->name('searchInventory');
+Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
+Route::put('/products/{id}', [ProductController::class, 'update'])->name('product.update');
+
+
+
+
+
